@@ -35,6 +35,8 @@ const {
     table
 } = require("./controllers/Table");
 
+const {createItem, getAllItems} = require("./controllers/Item");
+
 const { auth, isLoggedIn } = require('./middlewares/auth');
 
 
@@ -43,6 +45,8 @@ router.post("/login", login);
 router.post("/book-table", auth, table);
 router.get("/isloggedin", isLoggedIn);
 router.get("/logout", auth, logout);
+router.post("/create-item", createItem);
+router.get("/get-all-item", getAllItems);
 
 app.use("/api", router);
 

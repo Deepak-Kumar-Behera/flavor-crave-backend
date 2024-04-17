@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
-        itemName: {
+        name: {
             type: String,
             required: true,
             trim: true,
@@ -12,12 +12,22 @@ const itemSchema = new mongoose.Schema({
             trim: true,
         },
         dietType: {
-            type: String,
-            enum: ["Veg", "Non Veg"],
+            type: Number,
             required: true,
         },
-        tag: {
+        rating: {
+            type: Number,
+            required: true,
+        },
+        category: {
             type: String,
+            required: true,
+            trim: true,
+        },
+        image: {
+            type: String,
+            required: true,
+            trim: true,
         }
     },
     { timestamps: true }
