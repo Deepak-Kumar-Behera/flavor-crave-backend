@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // route
-app.get("/", (req, res) => {
+app.get("/", (req, res) => { 
     return res.json({
         success: true,
         message: "Your server is up and running..."
