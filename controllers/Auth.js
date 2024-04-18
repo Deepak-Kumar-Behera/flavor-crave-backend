@@ -35,7 +35,7 @@ exports.signup = async (req, res) => {
     if (existingUser) {
       return res.json({
         status: "error",
-        responseCode: 500,
+        responseCode: 501,
         message: "User already registered",
         data: null,
       });
@@ -91,7 +91,7 @@ exports.login = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         status: "error",
-        responseCode: 500,
+        responseCode: 501,
         message: "User is not registered, please signup first",
         data: null,
       });
