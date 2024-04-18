@@ -14,10 +14,12 @@ exports.table = async (req, res) => {
 
         // validate data
         if(!name || !email || !date || !time || !noOfGuests) {
-            return res.status(400).json({
-                success: false,
-                message: "All fields are required"
-            });
+            return res.json({
+        status: "error",
+        responseCode: 500,
+        message: "All fields are required",
+        data: null,
+      });
         }
 
         
@@ -33,10 +35,12 @@ exports.table = async (req, res) => {
             let tableExists = await Table.findOne({ date: date, time: time, tableNumber: tableNumber });
 
             if(tableExists) {
-                return res.status(409).json({
-                    success: false,
-                    message: "Specified table is reserved in this date and time",
-                })
+                return res.json({
+        status: "error",
+        responseCode: 500,
+        message: "Specified table is reserved in this date and time",
+        data: null,
+      });
             }
 
         }
@@ -53,10 +57,12 @@ exports.table = async (req, res) => {
             
             // set current table number
             if(i == maxTable+1) {
-                return res.status(403).json({
-                    success: false,
-                    message: "All tables are reserved",
-                })
+                return res.json({
+        status: "error",
+        responseCode: 500,
+        message: "All tables are reserved",
+        data: null,
+      });
             }
             
         }
@@ -93,23 +99,30 @@ exports.table = async (req, res) => {
         await mailSender(email, "Table Reservation Confirmation", bookingConfirmation(name, bookingId, formattedDate, formattedTime, noOfGuests));
 
         // return response
-        return res.status(200).json({
-            success: true,
-            message: "Booking Successful",
-            email,
-            bookingId,
+        return res.json({
+        status: "success",
+        responseCode: 200,
+        message: "Booking Successful",
+        data: {
+            email: email,
+            bookingId: bookingId,
+            tableNumber: tableNumber,
             date: formattedDate,
             time: formattedTime,
-            noOfGuests: noOfGuests,
-            tableNumber
-        })
+            noOfGuests: noOfGuests
+        },
+      });
+   
 
     }
     catch (error) {
         console.error(error);
-        return res.status(500).json({
-            success: false,
-            message: "Something went wrong. Please try again",
-        });
+        return res.json({
+        status: "error",
+        responseCode: 500,
+        message: "Something went wrong. Please try again",
+        data: null,
+      });
+     
     }
 }
