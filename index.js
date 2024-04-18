@@ -42,7 +42,7 @@ const { auth, isLoggedIn } = require('./middlewares/auth');
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/book-table", auth, table);
+router.post("/book-table", table);
 router.get("/isloggedin", isLoggedIn);
 router.get("/logout", auth, logout);
 router.post("/create-item", createItem);
