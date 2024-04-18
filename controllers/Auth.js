@@ -8,9 +8,11 @@ exports.signup = async (req, res) => {
     // fetch data from body of the request
     const { name, email, password, confirmPassword } = req.body;
 
+    console.log(name, email, password, confirmPassword);
+
     // validate the data
     if (!name || !email || !password || !confirmPassword) {
-      return res.status(403).json({
+      return res.json({
         status: "error",
         responseCode: 500,
         message: "All fields are required",
@@ -20,7 +22,7 @@ exports.signup = async (req, res) => {
 
     // match 2 passwords
     if (password !== confirmPassword) {
-      return res.status(400).json({
+      return res.json({
         status: "error",
         responseCode: 500,
         message: "Password does not match",
@@ -31,7 +33,7 @@ exports.signup = async (req, res) => {
     // check if user already exists or not
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({
+      return res.json({
         status: "error",
         responseCode: 500,
         message: "User already registered",
@@ -50,7 +52,7 @@ exports.signup = async (req, res) => {
     });
 
     // return res
-    return res.status(200).json({
+    return res.json({
       status: "success",
       responseCode: 200,
       message: "User Registered Successfully",
@@ -58,7 +60,7 @@ exports.signup = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    return res.json({
       status: "Internal Server Error",
       message: "User cannot be registered. Please try again",
       responseCode: 501,
@@ -72,9 +74,11 @@ exports.login = async (req, res) => {
     // fetch data from the body
     const { email, password } = req.body;
 
+    console.log(email, password);
+
     // validate data
     if (!email || !password) {
-      res.status(403).json({
+      res.json({
         status: "error",
         responseCode: 500,
         message: "All fields are required",
@@ -106,19 +110,19 @@ exports.login = async (req, res) => {
       user.password = undefined;
 
       // create cookie and send response
-      const options = {
-        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-        httpOnly: true,
-      };
-      return res.cookie("token", token, options).status(200).json({
-        success: true,
-        token,
-        user,
-        message: "Logged in successfully",
-      });
+      // const options = {
+      //   expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      //   httpOnly: true,
+      // };
+      // return res.cookie("token", token, options).status(200).json({
+      //   success: true,
+      //   token,
+      //   user,
+      //   message: "Logged in successfully",
+      // });
     } else {
       // return res
-      return res.status(401).json({
+      return res.json({
         status: "error",
         responseCode: 500,
         message: "Password is incorrect",
@@ -127,7 +131,7 @@ exports.login = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    return res.json({
       status: "error",
       responseCode: 501,
       message: "Login Failure, please try again",
