@@ -46,7 +46,7 @@ router.post("/book-table", auth, table);
 router.get("/isloggedin", isLoggedIn);
 router.get("/logout", auth, logout);
 router.post("/create-item", createItem);
-router.get("/get-all-item", getAllItems);
+router.get("/get-all-items", getAllItems);
 
 app.use("/api", router);
 
