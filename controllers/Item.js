@@ -8,16 +8,18 @@ exports.createItem = async (req, res) => {
 
     // validate data
     if (!name || !price || !dietType || !rating || !category || !image) {
-      return res.status(400).json({
-        success: false,
+      res.json({
+        responseCode: 500,
         message: "All fields are required",
+        data: null,
       });
     }
 
     if (dietType != 1 && dietType != 2) {
-      return res.status(400).json({
-        success: false,
+      res.json({
+        responseCode: 500,
         message: "Diet Type must be 1 or 2",
+        data: null,
       });
     }
 
@@ -32,39 +34,38 @@ exports.createItem = async (req, res) => {
     });
 
     // return res
-    return res.status(200).json({
-        success: true,
-        message: "Item Created Successfully",
-        item,
-    })
-
-
+    res.json({
+      responseCode: 200,
+      message: "Item Created Successfully",
+      data: item,
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong. Please try again",
+    res.json({
+      responseCode: 500,
+      message: "All fields are required",
+      data: null,
     });
   }
 };
 
 // get all items
 exports.getAllItems = async (req, res) => {
-    try{
-        console.log("Getting all items");
-        const items = await Item.find({});
-        console.log(items);
+  try {
+    console.log("Getting all items");
+    const items = await Item.find({});
+    console.log(items);
 
-        return res.status(200).json({
-            success: true,
-            message: "All items were successfully retrieved",
-            body: items
-        })
-    } 
-    catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: "Something went wrong. Please try again",
-        })
-    }
+    return res.json({
+      responseCode: 200,
+      message: "All items were successfully retrieved",
+      data: items,
+    });
+  } catch (error) {
+    return res.json({
+      responseCode: 500,
+      message: "Something went wrong. Please try again",
+      data: null,
+    });
+  }
 };
