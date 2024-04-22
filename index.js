@@ -44,7 +44,7 @@ router.post("/create-item", createItem);
 router.get("/get-all-items", getAllItems);
 router.post("/add-to-cart", addToCart);
 router.post("/show-cart", showCart);
-router.post("/remove-from-cart", removeItem);
+router.post("/remove-from-cart", removeItem); 
 
 app.use("/api", router);
 
