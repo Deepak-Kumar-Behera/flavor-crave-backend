@@ -1,4 +1,5 @@
 const Cart = require("../models/Cart");
+const Item = require("../models/Item");
 
 //add to cart
 exports.addToCart = async (req, res) => {
@@ -41,7 +42,6 @@ exports.addToCart = async (req, res) => {
 };
 
 //show cart
-
 exports.showCart = async (req, res) => {
   try {
     // fetch data
@@ -61,11 +61,34 @@ exports.showCart = async (req, res) => {
       userId,
     });
 
+    const itemIds = cart.map((item) => item.itemId);
+
+    const items = await Item.find({ _id: { $in: itemIds } });
+
+    console.log(cart);
+    console.log(items);
+
+    const mergedArray = [];
+
+  // Merge quantity of first array
+  const quantity = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+
+  // Add merged quantity to each item in the second array
+  // const updatedItems = items.map(item => ({ ...item, quantity }));
+  const updatedItems = items.map(item => {
+    const newItem = item.toObject ? item.toObject() : { ...item };
+    newItem.quantity = quantity;
+    return newItem;
+  });
+
+  // Concatenate the arrays
+  mergedArray.push(...updatedItems);
+
     // response
     return res.json({
       responseCode: 200,
       message: "Cart data fetched successfully",
-      data: cart,
+      data: mergedArray,
     });
   } catch (error) {
     console.log(error);
