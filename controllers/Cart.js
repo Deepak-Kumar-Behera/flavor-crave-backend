@@ -56,33 +56,35 @@ exports.showCart = async (req, res) => {
       });
     }
 
+    console.log(userId);
+
     // fetching all cart data of this user
-    const cart = await Cart.find({
-      userId,
-    });
-
-    const itemIds = cart.map((item) => item.itemId);
-
-    const items = await Item.find({ _id: { $in: itemIds } });
+    const cart = await Cart.find({ userId: userId });
 
     console.log(cart);
-    console.log(items);
 
-    const mergedArray = [];
+  //   const itemIds = cart.map((item) => item.itemId);
 
-  // Merge quantity of first array
-  const quantity = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+  //   const items = await Item.find({ _id: { $in: itemIds } });
 
-  // Add merged quantity to each item in the second array
-  // const updatedItems = items.map(item => ({ ...item, quantity }));
-  const updatedItems = items.map(item => {
-    const newItem = item.toObject ? item.toObject() : { ...item };
-    newItem.quantity = quantity;
-    return newItem;
-  });
+  //   console.log(cart);
+  //   console.log(items);
 
-  // Concatenate the arrays
-  mergedArray.push(...updatedItems);
+  //   const mergedArray = [];
+
+  // // Merge quantity of first array
+  // const quantity = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+
+  // // Add merged quantity to each item in the second array
+  // // const updatedItems = items.map(item => ({ ...item, quantity }));
+  // const updatedItems = items.map(item => {
+  //   const newItem = item.toObject ? item.toObject() : { ...item };
+  //   newItem.quantity = quantity;
+  //   return newItem;
+  // });
+
+  // // Concatenate the arrays
+  // mergedArray.push(...updatedItems);
 
     // response
     return res.json({

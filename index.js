@@ -41,7 +41,7 @@ router.post("/book-table", table);
 router.get("/isloggedin", isLoggedIn);
 router.get("/logout", auth, logout);
 router.post("/create-item", createItem);
-router.get("/get-all-items", getAllItems);
+router.post("/get-all-items", getAllItems);
 router.post("/add-to-cart", addToCart);
 router.post("/show-cart", showCart);
 router.post("/remove-from-cart", removeItem); 

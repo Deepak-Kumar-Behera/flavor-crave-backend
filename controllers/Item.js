@@ -76,11 +76,14 @@ exports.getAllItems = async (req, res) => {
   try {
     const { userId } = req.body;
 
+
     // Retrieve all items from the database
     const items = await Item.find({});
 
     // Assuming you have a Cart model and userId is the reference to the user's cart
     const userCart = await Cart.find({ userId });
+
+    console.log(userCart);
 
     // If the user has a cart, extract the itemIds from the cart
     const cartItemIds = userCart ? userCart.items.map(item => item.itemId.toString()) : [];
