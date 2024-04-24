@@ -182,3 +182,40 @@ exports.itemIncrease = async (req, res) => {
     });
   }
 };
+
+//item decrease
+exports.itemDecrease = async (req, res) => {
+  try {
+    //fetch data
+    let { cartId } = req.body;
+
+    //validate
+    if (!cartId) {
+      return res.json({
+        responseCode: 500,
+        message: "All fields are required",
+        data: null,
+      });
+    }
+
+    //database item decrease
+    const cartItem = await Cart.findByIdAndUpdate(
+      cartId,
+      { $inc: { quantity: -1 } },
+      { new: true }
+    );
+    //response
+    return res.json({
+      responseCode: 200,
+      message: "item increased",
+      data: cartItem,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      responseCode: 500,
+      message: "Something went wrong",
+      data: null,
+    });
+  }
+};
