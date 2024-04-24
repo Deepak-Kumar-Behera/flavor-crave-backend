@@ -33,6 +33,8 @@ const { createItem, getAllItems } = require("./controllers/Item");
 
 const { addToCart, showCart, removeItem } = require("./controllers/Cart");
 
+const {placeOrder, showOrder} = require("./controllers/Order");
+
 const { auth, isLoggedIn } = require("./middlewares/auth");
 
 router.post("/signup", signup);
@@ -45,6 +47,8 @@ router.post("/get-all-items", getAllItems);
 router.post("/add-to-cart", addToCart);
 router.post("/show-cart", showCart);
 router.post("/remove-from-cart", removeItem); 
+router.post("/place-order", placeOrder); 
+router.post("/show-order", showOrder);  
 
 app.use("/api", router);
 

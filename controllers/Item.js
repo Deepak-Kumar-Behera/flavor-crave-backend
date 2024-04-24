@@ -122,18 +122,17 @@ exports.getAllItems = async (req, res) => {
 
     console.log(userCart);
 
-    // If the user has a cart, extract the itemIds from the cart
-    const cartItemIds = userCart ? userCart.items.map(item => item.itemId.toString()) : [];
+    const itemIds = userCart.map((item) => item.itemId);
 
-    console.log(cartItemIds);
-
-    // Iterate through each item and add isAddedToCart key based on cartItemIds
+    // // Iterate through each item and add isAddedToCart key based on cartItemIds
     const itemsWithCartStatus = items.map(item => {
       return {
         ...item.toObject(),
-        isAddedToCart: cartItemIds.includes(item._id.toString())
+        isAddedToCart: itemIds.includes(item._id.toString())
       };
     });
+
+    console.log(itemsWithCartStatus);
 
     return res.json({
       responseCode: 200,

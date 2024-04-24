@@ -122,6 +122,14 @@ exports.removeItem = async (req, res) => {
       itemId,
     });
 
+    if(cart == null){
+      return res.json({
+        responseCode: 500,
+        message: "item doesn't exists",
+        data: null,
+      });
+    }
+
     // response
     return res.json({
       responseCode: 200,
