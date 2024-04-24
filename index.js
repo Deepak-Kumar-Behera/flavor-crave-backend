@@ -31,7 +31,7 @@ const { table } = require("./controllers/Table");
 
 const { createItem, getAllItems } = require("./controllers/Item");
 
-const { addToCart, showCart, removeItem } = require("./controllers/Cart");
+const { addToCart, showCart, removeItem, itemIncrease } = require("./controllers/Cart");
 
 const {placeOrder, showOrder} = require("./controllers/Order");
 
@@ -46,6 +46,7 @@ router.post("/create-item", createItem);
 router.post("/get-all-items", getAllItems);
 router.post("/add-to-cart", addToCart);
 router.post("/show-cart", showCart);
+router.post("/increase-cart-item", increaseCartItem);
 router.post("/remove-from-cart", removeItem); 
 router.post("/place-order", placeOrder); 
 router.post("/show-order", showOrder);  
