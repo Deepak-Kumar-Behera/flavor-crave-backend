@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 
 const { signup, login, logout } = require("./controllers/Auth");
 
-const { table } = require("./controllers/Table");
+const { table, showTableBookings } = require("./controllers/Table");
 
 const { createItem, getAllItems } = require("./controllers/Item");
 
@@ -57,6 +57,7 @@ router.post("/decrease-cart-item", itemDecrease);
 router.post("/remove-from-cart", removeItem);
 router.post("/place-order", placeOrder);
 router.post("/show-order", showOrder);
+router.post("/show-table-bookings", showTableBookings);
 
 app.use("/api", router);
 
