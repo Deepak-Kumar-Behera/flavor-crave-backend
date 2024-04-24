@@ -63,27 +63,27 @@ exports.showCart = async (req, res) => {
 
     const items = await Item.find({ _id: { $in: itemIds } });
 
-  //   console.log(cart);
+    //   console.log(cart);
     console.log(items);
 
-  //   const mergedArray = [];
+    //   const mergedArray = [];
 
-  // // Merge quantity of first array
-  const quantity = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+    // // Merge quantity of first array
+    const quantity = cart.reduce((acc, curr) => acc + curr.quantity, 0);
 
-  // // Add merged quantity to each item in the second array
-  // const updatedItems = items.map(item => ({ ...item, quantity }));
-  // console.log(updatedItems);
-  const updatedItems = items.map(item => {
-    const newItem = item.toObject ? item.toObject() : { ...item };
-    newItem.quantity = quantity;
-    return newItem;
-  });
+    // // Add merged quantity to each item in the second array
+    // const updatedItems = items.map(item => ({ ...item, quantity }));
+    // console.log(updatedItems);
+    const updatedItems = items.map((item) => {
+      const newItem = item.toObject ? item.toObject() : { ...item };
+      newItem.quantity = quantity;
+      return newItem;
+    });
 
-  console.log(updatedItems);
+    console.log(updatedItems);
 
-  // // Concatenate the arrays
-  // mergedArray.push(...updatedItems);
+    // // Concatenate the arrays
+    // mergedArray.push(...updatedItems);
 
     // response
     return res.json({
@@ -122,7 +122,7 @@ exports.removeItem = async (req, res) => {
       itemId,
     });
 
-    if(cart == null){
+    if (cart == null) {
       return res.json({
         responseCode: 500,
         message: "item doesn't exists",
@@ -135,6 +135,42 @@ exports.removeItem = async (req, res) => {
       responseCode: 200,
       message: "item removed",
       data: cart,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      responseCode: 500,
+      message: "Something went wrong",
+      data: null,
+    });
+  }
+};
+//increase quantity
+exports.itemIncrease = async (req, res) => {
+  try {
+    //fetch data
+    let { cartId } = req.body;
+
+    //validate
+    if (!cartId) {
+      return res.json({
+        responseCode: 500,
+        message: "All fields are required",
+        data: null,
+      });
+    }
+
+    //database item increase
+    const cartItem = await Cart.findByIdAndUpdate(
+      cartId,
+      { $inc: { quantity: 1 } },
+      { new: true }
+    );
+    //response
+    return res.json({
+      responseCode: 200,
+      message: "item increased",
+      data: cartItem,
     });
   } catch (error) {
     console.log(error);
