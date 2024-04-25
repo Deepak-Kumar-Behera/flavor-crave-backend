@@ -117,7 +117,7 @@ exports.removeItem = async (req, res) => {
       itemId,
     });
 
-    if (cart == null) {
+    if (cart == []) {
       return res.json({
         responseCode: 500,
         message: "item doesn't exists",
