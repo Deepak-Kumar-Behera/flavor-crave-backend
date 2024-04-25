@@ -101,6 +101,8 @@ exports.placeOrder = async (req, res) => {
 
     const order = await Order.find({ userId: userId });
 
+    console.log(order);
+
     // response
     return res.json({
       responseCode: 200,
@@ -153,7 +155,7 @@ exports.showOrder = async (req, res) => {
     return res.json({
       responseCode: 200,
       message: "Order fetched successfully",
-      data: "order",
+      data: mergedData,
     });
   } catch (error) {
     console.log(error);
