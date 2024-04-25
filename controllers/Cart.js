@@ -29,7 +29,7 @@ exports.addToCart = async (req, res) => {
     return res.json({
       responseCode: 200,
       message: "Add to cart successfully",
-      data: null,
+      data: cart,
     });
   } catch (error) {
     console.log(error);
@@ -63,33 +63,28 @@ exports.showCart = async (req, res) => {
 
     const items = await Item.find({ _id: { $in: itemIds } });
 
-    //   console.log(cart);
     console.log(items);
 
-    //   const mergedArray = [];
+    console.log(cart);
 
-    // // Merge quantity of first array
-    const quantity = cart.reduce((acc, curr) => acc + curr.quantity, 0);
-
-    // // Add merged quantity to each item in the second array
-    // const updatedItems = items.map(item => ({ ...item, quantity }));
-    // console.log(updatedItems);
-    const updatedItems = items.map((item) => {
-      const newItem = item.toObject ? item.toObject() : { ...item };
-      newItem.quantity = quantity;
-      return newItem;
+    const mergedItems = cart.map(order => {
+      const menuItem = items.find(item => item._id == order.itemId);
+      return { ...order.toObject(), menuItem: menuItem.toObject() };
     });
 
-    console.log(updatedItems);
+    console.log(mergedItems);
 
-    // // Concatenate the arrays
-    // mergedArray.push(...updatedItems);
+    // const updatedItems = items.map((item) => {
+    //   const newItem = item.toObject ? item.toObject() : { ...item };
+    //   newItem.quantity = quantity;
+    //   return newItem;
+    // });
 
     // response
     return res.json({
       responseCode: 200,
       message: "Cart data fetched successfully",
-      data: updatedItems,
+      data: mergedItems,
     });
   } catch (error) {
     console.log(error);
