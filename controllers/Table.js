@@ -8,12 +8,12 @@ const Table = require("../models/Table");
 exports.table = async (req, res) => {
   try {
     // fetch data
-    const { name, email, date, time, noOfGuests, message } = req.body;
+    const { name, email, date, time, noOfGuests, message, userId } = req.body;
     let { tableNumber } = req.body;
     const maxTable = 5;
 
     // validate data
-    if (!name || !email || !date || !time || !noOfGuests) {
+    if (!name || !email || !date || !time || !noOfGuests || !userId) {
       return res.json({
         status: "error",
         responseCode: 500,
@@ -72,6 +72,7 @@ exports.table = async (req, res) => {
     // create db entry
     const tableBooking = await Table.create({
       email: email,
+      userId: userId,
       name: name,
       date: date,
       time: time,
