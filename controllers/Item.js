@@ -44,7 +44,7 @@ exports.createItem = async (req, res) => {
     console.error(error);
     res.json({
       responseCode: 500,
-      message: "All fields are required",
+      message: "Something went wrong",
       data: null,
     });
   }
