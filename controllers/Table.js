@@ -148,7 +148,7 @@ exports.showTableBookings = async (req, res) => {
     }
 
     //database fetching previus bookings
-    const bookings = await Table.find();
+    const bookings = await Table.find({ userId: userId });
     //response
     return res.json({
       responseCode: 200,
