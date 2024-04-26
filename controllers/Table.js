@@ -15,7 +15,6 @@ exports.table = async (req, res) => {
     // validate data
     if (!name || !email || !date || !time || !noOfGuests || !userId) {
       return res.json({
-        status: "error",
         responseCode: 500,
         message: "All fields are required",
         data: null,
@@ -38,7 +37,6 @@ exports.table = async (req, res) => {
 
       if (tableExists) {
         return res.json({
-          status: "error",
           responseCode: 500,
           message: "Specified table is reserved in this date and time",
           data: null,
@@ -61,7 +59,6 @@ exports.table = async (req, res) => {
       // set current table number
       if (i == maxTable + 1) {
         return res.json({
-          status: "error",
           responseCode: 500,
           message: "All tables are reserved",
           data: null,
@@ -109,7 +106,6 @@ exports.table = async (req, res) => {
 
     // return response
     return res.json({
-      status: "success",
       responseCode: 200,
       message: "Booking Successful",
       data: {
@@ -124,7 +120,6 @@ exports.table = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.json({
-      status: "error",
       responseCode: 500,
       message: "Something went wrong. Please try again",
       data: null,
