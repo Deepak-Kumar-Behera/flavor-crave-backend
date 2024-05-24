@@ -235,7 +235,7 @@ exports.orderCancel = async (req, res) => {
     if (order == []) {
       return res.json({
         responseCode: 500,
-        message: "item doesn't exists",
+        message: "order doesn't exists",
         data: null,
       });
     }

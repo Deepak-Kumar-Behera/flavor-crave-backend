@@ -160,3 +160,45 @@ exports.showTableBookings = async (req, res) => {
     });
   }
 };
+
+//table cancel
+exports.tableCancel = async (req, res) => {
+  try {
+    // fetch data
+    let { bookingId } = req.body;
+
+    // validate data
+    if (!bookingId) {
+      return res.json({
+        responseCode: 500,
+        message: "All fields are required",
+        data: null,
+      });
+    }
+
+    // removing order from ordertable
+    const table = await Table.findByIdAndDelete(bookingId);
+
+    if (table == []) {
+      return res.json({
+        responseCode: 500,
+        message: "booking doesn't exist",
+        data: null,
+      });
+    }
+
+    // response
+    return res.json({
+      responseCode: 200,
+      message: "booking cancelled",
+      data: table,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      responseCode: 500,
+      message: "Something went wrong",
+      data: null,
+    });
+  }
+};
