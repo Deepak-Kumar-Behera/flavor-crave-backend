@@ -33,7 +33,7 @@ exports.placeOrder = async (req, res) => {
 
     function getDeliveryTime(num) {
       const currentTime = new Date();
-      const thirtyMinutesLater = new Date(currentTime.getTime() + 30 * 60000); // 30 minutes in milliseconds
+      const thirtyMinutesLater = new Date(currentTime.getTime() + 360 * 60000); // 30 minutes in milliseconds
 
       // Array of short month names
       const shortMonthNames = [
