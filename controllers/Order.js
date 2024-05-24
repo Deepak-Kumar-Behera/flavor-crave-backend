@@ -161,6 +161,7 @@ exports.showOrder = async (req, res) => {
     });
 
     console.log(mergedData);
+    mergedData.reverse();
 
     // response
     return res.json({
