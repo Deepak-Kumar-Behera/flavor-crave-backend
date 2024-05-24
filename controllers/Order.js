@@ -230,7 +230,7 @@ exports.orderCancel = async (req, res) => {
     }
 
     // removing order from ordertable
-    const order = await Order.findOneAndDelete({
+    const order = await Order.findByIdAndDelete({
       orderId,
     });
 
