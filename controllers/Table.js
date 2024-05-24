@@ -181,7 +181,7 @@ exports.tableCancel = async (req, res) => {
     // removing order from ordertable
     const table = await Table.findByIdAndDelete(bookingId);
 
-    if (table == []) {
+    if (!table) {
       return res.json({
         responseCode: 500,
         message: "booking doesn't exist",

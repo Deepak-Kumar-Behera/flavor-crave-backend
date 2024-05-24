@@ -233,7 +233,7 @@ exports.orderCancel = async (req, res) => {
     // removing order from ordertable
     const order = await Order.findByIdAndDelete(orderId);
 
-    if (order == []) {
+    if (!order) {
       return res.json({
         responseCode: 500,
         message: "order doesn't exists",
