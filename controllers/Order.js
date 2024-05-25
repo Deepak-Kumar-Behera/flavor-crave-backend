@@ -231,7 +231,13 @@ exports.orderCancel = async (req, res) => {
     }
 
     // removing order from ordertable
-    const order = await Order.findByIdAndDelete(orderId);
+    // const order = await Order.findByIdAndDelete(orderId);
+
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { status: 4 },
+      { new: true }
+    );
 
     if (!order) {
       return res.json({
