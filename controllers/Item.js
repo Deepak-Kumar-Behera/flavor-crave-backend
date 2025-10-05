@@ -53,10 +53,8 @@ exports.createItem = async (req, res) => {
 // get all items
 exports.getAllItems = async (req, res) => {
   try {
-    const {userId} = req.body;
-
     const items = await Item.find({});
-    console.log(items);
+    console.log("getAllItems", items);
 
     return res.json({
       responseCode: 200,
@@ -109,41 +107,41 @@ exports.getAllItems = async (req, res) => {
 //   }
 // };
 
-exports.getAllItems = async (req, res) => {
-  try {
-    const { userId } = req.body;
+// exports.getAllItems = async (req, res) => {
+//   try {
+//     const { userId } = req.body;
 
 
-    // Retrieve all items from the database
-    const items = await Item.find({});
+//     // Retrieve all items from the database
+//     const items = await Item.find({});
 
-    // Assuming you have a Cart model and userId is the reference to the user's cart
-    const userCart = await Cart.find({ userId });
+//     // Assuming you have a Cart model and userId is the reference to the user's cart
+//     const userCart = await Cart.find({ userId });
 
-    console.log(userCart);
+//     console.log(userCart);
 
-    const itemIds = userCart.map((item) => item.itemId);
+//     const itemIds = userCart.map((item) => item.itemId);
 
-    // // Iterate through each item and add isAddedToCart key based on cartItemIds
-    const itemsWithCartStatus = items.map(item => {
-      return {
-        ...item.toObject(),
-        isAddedToCart: itemIds.includes(item._id.toString())
-      };
-    });
+//     // // Iterate through each item and add isAddedToCart key based on cartItemIds
+//     const itemsWithCartStatus = items.map(item => {
+//       return {
+//         ...item.toObject(),
+//         isAddedToCart: itemIds.includes(item._id.toString())
+//       };
+//     });
 
-    console.log(itemsWithCartStatus);
+//     console.log(itemsWithCartStatus);
 
-    return res.json({
-      responseCode: 200,
-      message: "All items were successfully retrieved",
-      data: itemsWithCartStatus,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      responseCode: 500,
-      message: "Something went wrong. Please try again",
-      data: null,
-    });
-  }
-};
+//     return res.json({
+//       responseCode: 200,
+//       message: "All items were successfully retrieved",
+//       data: itemsWithCartStatus,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       responseCode: 500,
+//       message: "Something went wrong. Please try again",
+//       data: null,
+//     });
+//   }
+// };

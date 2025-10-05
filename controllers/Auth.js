@@ -51,12 +51,16 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
     });
 
+    // delete password from the response
+    const userObj = user.toObject();
+    delete userObj.password;
+
     // return res
     return res.json({
       status: "success",
       responseCode: 200,
       message: "User Registered Successfully",
-      data: user,
+      data: userObj,
     });
   } catch (error) {
     console.error(error);
@@ -106,7 +110,8 @@ exports.login = async (req, res) => {
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "2h",
       });
-      user.token = token;
+
+      // make password undefined in the response
       user.password = undefined;
 
       // create cookie and send response
@@ -115,7 +120,7 @@ exports.login = async (req, res) => {
       //   httpOnly: true,
       // };
       // return res.cookie("token", token, options).status(200).json({
-      return res.json({
+      return res.header({ "Authorization": `Bearer ${token}` }).json({
         status: "success",
         responseCode: 200,
         message: "Logged in successfully",
