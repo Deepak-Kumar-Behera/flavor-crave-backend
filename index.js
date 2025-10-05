@@ -54,7 +54,7 @@ router.get("/isloggedin", isLoggedIn);
 router.get("/logout", auth, logout);
 router.post("/create-item", createItem);
 router.get("/get-all-items", getAllItems);
-router.post("/add-to-cart", addToCart);
+router.post("/add-to-cart", auth, addToCart);
 router.post("/show-cart", showCart);
 router.post("/increase-cart-item", itemIncrease);
 router.post("/decrease-cart-item", itemDecrease);
