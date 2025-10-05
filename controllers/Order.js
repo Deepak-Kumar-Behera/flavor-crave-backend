@@ -31,45 +31,56 @@ exports.placeOrder = async (req, res) => {
       });
     }
 
-    function getDeliveryTime (num) {
-        const currentTime = new Date();
-        const thirtyMinutesLater = new Date(currentTime.getTime() + 30 * 60000); // 30 minutes in milliseconds
-        
-        // Array of short month names
-        const shortMonthNames = [
-          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        ];
-        
-        // Function to add leading zeros to single-digit numbers
-        const addLeadingZero = (number) => {
-          return number < 10 ? '0' + number : number;
-        };
-        
-        // Get day, short month name, and year from the date object
-        const day = addLeadingZero(thirtyMinutesLater.getDate());
-        const monthIndex = thirtyMinutesLater.getMonth();
-        const shortMonth = shortMonthNames[monthIndex];
-        const year = thirtyMinutesLater.getFullYear();
-        
-        // Combine day, short month name, and year
-        const formattedDate = `${day} ${shortMonth} ${year}`;
-        
-        // Format time
-        const formattedTime = thirtyMinutesLater.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        console.log("Formatted Time:", formattedTime);
-        console.log("Formatted Date:", formattedDate);
-        
-        if(num == 0){
-            return formattedTime;
-        }
-        if(num == 1){
-            return formattedDate;
-        }
-    };
+    function getDeliveryTime(num) {
+      const currentTime = new Date();
+      const thirtyMinutesLater = new Date(currentTime.getTime() + 360 * 60000); // 30 minutes in milliseconds
 
+      // Array of short month names
+      const shortMonthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
 
+      // Function to add leading zeros to single-digit numbers
+      const addLeadingZero = (number) => {
+        return number < 10 ? "0" + number : number;
+      };
+
+      // Get day, short month name, and year from the date object
+      const day = addLeadingZero(thirtyMinutesLater.getDate());
+      const monthIndex = thirtyMinutesLater.getMonth();
+      const shortMonth = shortMonthNames[monthIndex];
+      const year = thirtyMinutesLater.getFullYear();
+
+      // Combine day, short month name, and year
+      const formattedDate = `${day} ${shortMonth} ${year}`;
+
+      // Format time
+      const formattedTime = thirtyMinutesLater.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      console.log("Formatted Time:", formattedTime);
+      console.log("Formatted Date:", formattedDate);
+
+      if (num == 0) {
+        return formattedTime;
+      }
+      if (num == 1) {
+        return formattedDate;
+      }
+    }
 
     Promise.all(
       cartItems.map(async (cartItem) => {
@@ -150,6 +161,7 @@ exports.showOrder = async (req, res) => {
     });
 
     console.log(mergedData);
+    mergedData.reverse();
 
     // response
     return res.json({
@@ -169,37 +181,84 @@ exports.showOrder = async (req, res) => {
 
 // change order status
 exports.changeOrderStatus = async (req, res) => {
-    try {
-      // fetch data
-      let { orderId } = req.body;
-  
-      console.log(userId);
-  
-      // validate data
-      if (!orderId) {
-        return res.json({
-          responseCode: 500,
-          message: "Please provide orderId",
-          data: null,
-        });
-      }
-  
-      // Find order and change status
-    //   const order = await Order.findByIdAndUpdate()
-      
-  
-      // response
-      return res.json({
-        responseCode: 200,
-        message: "Order fetched successfully",
-        data: "order",
-      });
-    } catch (error) {
-      console.log(error);
+  try {
+    // fetch data
+    let { orderId } = req.body;
+
+    console.log(userId);
+
+    // validate data
+    if (!orderId) {
       return res.json({
         responseCode: 500,
-        message: "Something went wrong",
+        message: "Please provide orderId",
         data: null,
       });
     }
-  };
+
+    // Find order and change status
+    //   const order = await Order.findByIdAndUpdate()
+
+    // response
+    return res.json({
+      responseCode: 200,
+      message: "Order fetched successfully",
+      data: "order",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      responseCode: 500,
+      message: "Something went wrong",
+      data: null,
+    });
+  }
+};
+
+//cancel order
+exports.orderCancel = async (req, res) => {
+  try {
+    // fetch data
+    let { orderId } = req.body;
+
+    // validate data
+    if (!orderId) {
+      return res.json({
+        responseCode: 500,
+        message: "All fields are required",
+        data: null,
+      });
+    }
+
+    // removing order from ordertable
+    // const order = await Order.findByIdAndDelete(orderId);
+
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { status: 4 },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.json({
+        responseCode: 500,
+        message: "order doesn't exists",
+        data: null,
+      });
+    }
+
+    // response
+    return res.json({
+      responseCode: 200,
+      message: "order cancelled",
+      data: order,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      responseCode: 500,
+      message: "Something went wrong",
+      data: null,
+    });
+  }
+};

@@ -44,31 +44,34 @@ exports.createItem = async (req, res) => {
     console.error(error);
     res.json({
       responseCode: 500,
-      message: "All fields are required",
+      message: "Something went wrong",
       data: null,
     });
   }
 };
 
 // get all items
-exports.getAllItems = async (req, res) => {
-  try {
-    const items = await Item.find({});
-    console.log("getAllItems", items);
 
-    return res.json({
-      responseCode: 200,
-      message: "All items were successfully retrieved",
-      data: items,
-    });
-  } catch (error) {
-    return res.json({
-      responseCode: 500,
-      message: "Something went wrong. Please try again",
-      data: null,
-    });
-  }
-};
+// exports.getAllItems = async (req, res) => {
+//   try {
+//     const items = await Item.find({});
+//     console.log("getAllItems", items);
+
+
+
+//     return res.json({
+//       responseCode: 200,
+//       message: "All items were successfully retrieved",
+//       data: items,
+//     });
+//   } catch (error) {
+//     return res.json({
+//       responseCode: 500,
+//       message: "Something went wrong. Please try again",
+//       data: null,
+//     });
+//   }
+// };
 
 // exports.getAllItems = async (req, res) => {
 //   try {

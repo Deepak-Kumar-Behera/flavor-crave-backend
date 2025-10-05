@@ -8,14 +8,13 @@ const Table = require("../models/Table");
 exports.table = async (req, res) => {
   try {
     // fetch data
-    const { name, email, date, time, noOfGuests, message } = req.body;
+    const { name, email, date, time, noOfGuests, message, userId } = req.body;
     let { tableNumber } = req.body;
     const maxTable = 5;
 
     // validate data
-    if (!name || !email || !date || !time || !noOfGuests) {
+    if (!name || !email || !date || !time || !noOfGuests || !userId) {
       return res.json({
-        status: "error",
         responseCode: 500,
         message: "All fields are required",
         data: null,
@@ -38,7 +37,6 @@ exports.table = async (req, res) => {
 
       if (tableExists) {
         return res.json({
-          status: "error",
           responseCode: 500,
           message: "Specified table is reserved in this date and time",
           data: null,
@@ -61,7 +59,6 @@ exports.table = async (req, res) => {
       // set current table number
       if (i == maxTable + 1) {
         return res.json({
-          status: "error",
           responseCode: 500,
           message: "All tables are reserved",
           data: null,
@@ -72,6 +69,7 @@ exports.table = async (req, res) => {
     // create db entry
     const tableBooking = await Table.create({
       email: email,
+      userId: userId,
       name: name,
       date: date,
       time: time,
@@ -108,7 +106,6 @@ exports.table = async (req, res) => {
 
     // return response
     return res.json({
-      status: "success",
       responseCode: 200,
       message: "Booking Successful",
       data: {
@@ -123,7 +120,6 @@ exports.table = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.json({
-      status: "error",
       responseCode: 500,
       message: "Something went wrong. Please try again",
       data: null,
@@ -148,12 +144,56 @@ exports.showTableBookings = async (req, res) => {
     }
 
     //database fetching previus bookings
-    const bookings = await Table.find();
+    const bookings = await Table.find({ userId: userId });
+
+    bookings.reverse();
     //response
     return res.json({
       responseCode: 200,
       message: "sending bookings",
       data: bookings,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      responseCode: 500,
+      message: "Something went wrong",
+      data: null,
+    });
+  }
+};
+
+//table cancel
+exports.tableCancel = async (req, res) => {
+  try {
+    // fetch data
+    let { bookingId } = req.body;
+
+    // validate data
+    if (!bookingId) {
+      return res.json({
+        responseCode: 500,
+        message: "All fields are required",
+        data: null,
+      });
+    }
+
+    // removing order from ordertable
+    const table = await Table.findByIdAndDelete(bookingId);
+
+    if (!table) {
+      return res.json({
+        responseCode: 500,
+        message: "booking doesn't exist",
+        data: null,
+      });
+    }
+
+    // response
+    return res.json({
+      responseCode: 200,
+      message: "booking cancelled",
+      data: table,
     });
   } catch (error) {
     console.log(error);

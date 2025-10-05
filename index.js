@@ -27,7 +27,11 @@ app.get("/", (req, res) => {
 
 const { signup, login, logout } = require("./controllers/Auth");
 
-const { table, showTableBookings } = require("./controllers/Table");
+const {
+  table,
+  showTableBookings,
+  tableCancel,
+} = require("./controllers/Table");
 
 const { createItem, getAllItems } = require("./controllers/Item");
 
@@ -39,7 +43,7 @@ const {
   itemDecrease,
 } = require("./controllers/Cart");
 
-const { placeOrder, showOrder } = require("./controllers/Order");
+const { placeOrder, showOrder, orderCancel } = require("./controllers/Order");
 
 const { auth, isLoggedIn } = require("./middlewares/auth");
 
@@ -58,6 +62,8 @@ router.post("/remove-from-cart", removeItem);
 router.post("/place-order", placeOrder);
 router.post("/show-order", showOrder);
 router.post("/show-table-bookings", showTableBookings);
+router.post("/order-cancel", orderCancel);
+router.post("/table-cancel", tableCancel);
 
 app.use("/api", router);
 
