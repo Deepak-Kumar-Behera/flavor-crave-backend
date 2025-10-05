@@ -8,12 +8,16 @@ const Table = require("../models/Table");
 exports.table = async (req, res) => {
   try {
     // fetch data
-    const { name, email, date, time, noOfGuests, message, userId } = req.body;
+    const { date, time, noOfGuests, message } = req.body;
     let { tableNumber } = req.body;
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
+    const { name, email, id } = req.user;
     const maxTable = 5;
 
     // validate data
-    if (!name || !email || !date || !time || !noOfGuests || !userId) {
+    if (!date || !time || !noOfGuests) {
       return res.json({
         responseCode: 500,
         message: "All fields are required",
@@ -28,7 +32,7 @@ exports.table = async (req, res) => {
     const formattedDate = dateObj.toDateString();
 
     // check for specified table availability
-    if (tableNumber !== "") {
+    if (tableNumber) {
       let tableExists = await Table.findOne({
         date: date,
         time: time,
@@ -69,7 +73,7 @@ exports.table = async (req, res) => {
     // create db entry
     const tableBooking = await Table.create({
       email: email,
-      userId: userId,
+      userId: id,
       name: name,
       date: date,
       time: time,
@@ -121,7 +125,7 @@ exports.table = async (req, res) => {
     console.error(error);
     return res.json({
       responseCode: 500,
-      message: "Something went wrong. Please try again",
+      message: `Something went wrong. ${error}`,
       data: null,
     });
   }

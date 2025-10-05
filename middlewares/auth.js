@@ -4,18 +4,14 @@ require("dotenv").config();
 // auth
 exports.auth = async (req, res, next) => {
     try {
-        console.log(req.cookies.token);
-
         // extract token
-        const token = req.cookies.token 
-        || req.body.token
-        || req.header("Authorisation").replace("Bearer", "");
+        const token = req.headers['authorization']?.replace('Bearer ', '');
         
         // if token missing, then return response
         if(!token) {
             return res.status(401).json({
                 success: false,
-                message: "Token is missing",
+                message: "Authorization Token is missing",
             });
         }
 
@@ -37,7 +33,7 @@ exports.auth = async (req, res, next) => {
     } catch (error) {
         return res.status(401).json({
             success: false,
-            message: "Something went wrong while validating the token",
+            message: `Error: ${error}`,
         });
     }
 }
