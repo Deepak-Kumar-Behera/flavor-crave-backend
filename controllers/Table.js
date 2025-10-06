@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mailSender = require("./MailSender");
 const {
-  bookingConfirmation,
+  bookingConfirmation
 } = require("../mail_templates/bookingConfirmation");
 const Table = require("../models/Table");
 
@@ -10,10 +10,11 @@ exports.table = async (req, res) => {
     // fetch data
     const { date, time, noOfGuests, message } = req.body;
     let { tableNumber } = req.body;
-    if (!req.user) {
+    const user = req.user;
+    console.log(req.user);
+    if (!user) {
       return res.status(401).json({ message: "Unauthorized access" });
     }
-    const { name, email, id } = req.user;
     const maxTable = 5;
 
     // validate data
@@ -72,9 +73,9 @@ exports.table = async (req, res) => {
 
     // create db entry
     const tableBooking = await Table.create({
-      email: email,
-      userId: id,
-      name: name,
+      userId: user.id,
+      email: user.email,
+      name: user.name,
       date: date,
       time: time,
       noOfGuests: noOfGuests,
